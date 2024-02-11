@@ -38,7 +38,7 @@ public class FileController {
     public void serveFileHandler(@PathVariable String fileName, HttpServletResponse response) throws IOException {
 
         InputStream resource = fileService.getResourceFile(path, fileName);
-        response.setContentType(MediaType.IMAGE_JPEG_VALUE);
+        response.setContentType(fileName);
         StreamUtils.copy(resource, response.getOutputStream());
     }
 }

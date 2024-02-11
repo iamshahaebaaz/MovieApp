@@ -19,21 +19,30 @@ public class FileServiceImpl implements FileService {
         // get the file path
         String filePath = path + File.separator + fileName;
 
-        //create a file object
-        File f= new File(path);
-        if(!f.exists()){
-            f.mkdirs();
+
+        // create the directory if it doesn't exist
+        Files.createDirectories(Paths.get(path));
+
+        // copy the file or upload the file to the path.
+        try (InputStream inputStream = file.getInputStream()) {
+            Files.copy(inputStream, Paths.get(filePath), StandardCopyOption.REPLACE_EXISTING);
+        } catch (IOException e) {
+            // Handle the exception according to your requirements
+            throw new IOException("Failed to upload the file", e);
         }
-
-        //copy the file or upload the file to the path.
-        Files.copy(file.getInputStream(), Paths.get(filePath), StandardCopyOption.REPLACE_EXISTING);
-
         return fileName;
     }
 
     @Override
-    public InputStream getResourceFile(String path, String fileName) throws FileNotFoundException {
-        String filepath = path + File.separator + fileName;
-        return new FileInputStream(filepath);
+    public InputStream getResourceFile(String path, String fileName) throws FileNotFoundException,IOException {
+    // path + File.separator + fileName;
+        String filepath = Paths.get(path,fileName).toString();
+        File file = new File(filepath);
+
+        if(!file.exists()){
+            throw new FileNotFoundException("File not Found:"+ filepath);
+        }
+
+        return Files.newInputStream(Paths.get(filepath));
     }
 }

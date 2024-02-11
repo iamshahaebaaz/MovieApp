@@ -1,12 +1,18 @@
 package com.movieflix.dto;
 
+import jakarta.annotation.security.DenyAll;
 import jakarta.persistence.CollectionTable;
 import jakarta.persistence.Column;
 import jakarta.persistence.ElementCollection;
 import jakarta.validation.constraints.NotBlank;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.Set;
-
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class MovieDto {
     private Integer movieId;
 

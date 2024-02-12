@@ -3,7 +3,9 @@ package com.movieflix.controller;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.movieflix.dto.MovieDto;
+import com.movieflix.dto.MoviePageResponse;
 import com.movieflix.services.MovieService;
+import com.movieflix.utils.AppConstants;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -60,6 +62,24 @@ public class MovieController {
             throw new RuntimeException(e);
         }
 
+    }
+
+    @GetMapping("/allMoviePage")
+    public ResponseEntity<MoviePageResponse> getMovieWithPagination(
+            @RequestParam(defaultValue = AppConstants.PAGE_NUMBER, required = false) Integer pageNumber,
+            @RequestParam(defaultValue = AppConstants.PAGE_SIZE, required = false) Integer pageSize
+            ){
+        return ResponseEntity.ok(movieService.getAllMoviesWithPagination(pageNumber, pageSize));
+    }
+
+    @GetMapping("/allMoviePageSort")
+    public ResponseEntity<MoviePageResponse> getMovieWithPaginationAndSort(
+            @RequestParam(defaultValue = AppConstants.PAGE_NUMBER, required = false) Integer pageNumber,
+            @RequestParam(defaultValue = AppConstants.PAGE_SIZE, required = false) Integer pageSize,
+            @RequestParam(defaultValue = AppConstants.SORT_BY, required = false) String sortBy,
+            @RequestParam(defaultValue = AppConstants.SORT_DIR, required = false) String dir
+    ){
+        return ResponseEntity.ok(movieService.getAllMoviesWithPaginationAndSorting(pageNumber, pageSize,sortBy,dir));
     }
 
     private MovieDto convertMovieDto(String movieDtoObj) throws JsonProcessingException {
